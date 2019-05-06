@@ -1,0 +1,12 @@
+version: '2'
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker:latest
+    environment:
+      - TZ=GB
+    network_mode: host
+    volumes:
+      - /opt/docker-plex/config:/config
+      - /opt/docker-plex/transcode:/transcode
+      - /mnt:/data
