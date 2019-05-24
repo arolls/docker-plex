@@ -1,10 +1,5 @@
 # docker-plex
-Files to run Plex Media Server with Docker and autostart with systemd
-
-NOTE: In my experience it can take a few *minutes* for Plex to start on boot. You can monitor the progress using the command: docker ps -a
-
-# Operating System
-This guide refers to Ubuntu 18.04 but with some minor modifications you should be able to get this to run under RHEL/CentOS. The information is available elsewhere but I wanted to group it in to one place for new users.
+Files to run Plex Media Server with Docker and autostart under Ubuntu 18.04
 
 # Prerequisties
 Install docker: https://docs.docker.com/install/linux/docker-ce/ubuntu/
@@ -30,13 +25,6 @@ sudo mkdir /opt/docker-plex /opt/docker-plex/transcode /opt/docker-plex/config
 ```
 sudo cp docker-compose.yml /opt/docker-plex
 ```
-
-# Setting autostart using systemd
-- Place 'plex.service' from this repo in to:
-```
-sudo cp plex.service /etc/systemd/system/
-```
-Notice that this file references the install location so if you have a custom install location you will need to modify this file also.
 
 # Firewall Rules
 - Place the file 'plexmediaserver' in:
@@ -64,6 +52,7 @@ services:
   plex:
     container_name: plex
     image: plexinc/pms-docker:latest
+    restart: always
     environment:
       - TZ=GB
     network_mode: host
@@ -72,3 +61,6 @@ services:
       - /opt/docker-plex/transcode:/transcode
       - /home/user/media:/data
 ```
+
+# Autostart with systemd
+I have included a file plex.service if you wish to use systemd to start your plex container on boot. I prefer to use the built in Docker restart policy "always" as using systemd seem to introduce a wait time for the Plex container to start when the system booted.
